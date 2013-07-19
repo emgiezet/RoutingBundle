@@ -43,12 +43,6 @@ class CmfRoutingExtension extends Extension
         }
 
         $this->setupFormTypes($config, $container, $loader);
-
-        // if there is twig, register our form type with twig
-        if ($container->hasParameter('twig.form.resources')) {
-            $resources = $container->getParameter('twig.form.resources');
-            $container->setParameter('twig.form.resources', array_merge($resources, array('CmfRoutingBundle:Form:terms_form_type.html.twig')));
-        }
     }
 
     public function setupFormTypes(array $config, ContainerBuilder $container, LoaderInterface $loader)
@@ -129,6 +123,8 @@ class CmfRoutingExtension extends Extension
     public function loadPhpcrProvider($config, XmlFileLoader $loader, ContainerBuilder $container)
     {
         $loader->load('provider_phpcr.xml');
+
+        $container->setParameter($this->getAlias() . '.backend_type_phpcr', true);
 
         $container->setParameter($this->getAlias() . '.phpcr_provider.route_basepath', $config['route_basepath']);
         $container->setParameter($this->getAlias() . '.phpcr_provider.content_basepath', $config['content_basepath']);
